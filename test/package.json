@@ -1,0 +1,7 @@
+{
+  "name": "grunt-runner-test",
+  "version": "0.1.0",
+  "taskList": ["run"],
+  "configure": {
+  }
+}
