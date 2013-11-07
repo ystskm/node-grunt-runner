@@ -6,9 +6,9 @@ This module is not required CLI.
 ## Install
 
 Install with [npm](http://github.com/isaacs/npm):
-
+```sh
     npm install grunt-runner
-    
+```
 ## API - runs grunt tasks under "tasks" directory which is just below
 
     var gruntr = require('grunt-runner');
@@ -17,6 +17,7 @@ Install with [npm](http://github.com/isaacs/npm):
 ### - example for running configuration
 _Default: package.json_
 
+```js
     {
       "name": "grunt-runner-test",
       "version": "0.1.0",
@@ -24,21 +25,26 @@ _Default: package.json_
       "configure": {
       }
     }
+```
 
 ####before example for Gruntfile.js, attention that underscore is included.
 This object is extended for running tasks.  
 see: __lib/task-utin.js__
     
-    var _ = require('grunt-runner')._;
+```
+var _ = require('grunt-runner')._;
+```
     
 ### - example for Gruntfile.js
 _in this case deploy in __"tasks/run"__ directory_
 
-	module.exports = function(grunt) {
-	  grunt.registerTask('run', 'test for grunt-runner', function() {
-              ...
-	  });
-	};
+```js
+module.exports = function(grunt) {
+  grunt.registerTask('run', 'test for grunt-runner', function() {
+          ...
+  });
+};
+```
 
 ### - if you want add tasks more easily, use utilities
 ```js
