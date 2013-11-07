@@ -5,10 +5,10 @@ var taskname = __dirname.split('/').pop(); // run
 module.exports = function(grunt) {
   var tmes = 'Grunt Runner test: ' + taskname;
   grunt.registerTask(taskname, tmes, _.caught(function() {
-    foonyahPrepare(grunt, _.mixedConfigure(grunt, taskname), this);
+    gruntRunnerTest(grunt, _.mixedConfigure(grunt, taskname), this);
   }, grunt.fail));
 };
-function foonyahPrepare(grunt, conf, gtask) {
+function gruntRunnerTest(grunt, conf, gtask) {
 
   var line = [], done = gtask.async(), stop = function(e) {
     grunt.fail.fatal(e);
