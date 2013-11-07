@@ -1,7 +1,7 @@
 # grunt-runner, grun
 
 Support for executing grunt tasks.  
-This module is not required CLI.
+CLI operation is not required to use.
 
 ## Install
 
