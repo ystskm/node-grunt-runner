@@ -1,5 +1,6 @@
 {
   "name": "grun",
+  "description": "Utility for executing grunt tasks.",
   "version": "0.1.0",
   "author": {
     "name": "Yoshitaka Sakamoto",
@@ -13,7 +14,6 @@
     "micro-pipe": "0.1.4",
     "underscore": "1.5.2"
   },
-  "description": "A small utility for async pipe",
   "devDependencies": {},
   "keywords": ["util","grunt","runner"],
   "main": "index.js",
