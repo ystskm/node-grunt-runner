@@ -32,7 +32,7 @@ _Default: package.json_
 This object is extended for running tasks.  
 see: __lib/task-utin.js__
 ```js
-var _ = require('grunt-runner')._;
+var _ = require('grun')._;
 ```
 ### - example for Gruntfile.js
 _in this case deploy in_ __"tasks/run"__ _directory_
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 ```
 ### - if you want add tasks more easily, use utilities
 ```js
-var path = require('path'), fs = require('fs'), _ = require('grunt-runner')._;
+var path = require('path'), fs = require('fs'), _ = require('grun')._;
 var taskname = __dirname.split('/').pop(); // run
 
 function gruntRunnerTest(grunt, conf, gtask) {

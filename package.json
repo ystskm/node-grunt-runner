@@ -1,7 +1,7 @@
 {
   "name": "grun",
   "description": "Utility for executing grunt tasks.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Yoshitaka Sakamoto",
     "url": "http://github.com/ystskm",
