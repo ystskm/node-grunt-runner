@@ -1,7 +1,7 @@
 {
-  "name": "grun",
+  "name": "grunt-runner",
   "description": "Utility for executing grunt tasks.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Yoshitaka Sakamoto",
     "url": "http://github.com/ystskm",
@@ -18,7 +18,7 @@
   "keywords": ["util","grunt","runner"],
   "main": "index.js",
   "repository": {
-    "url": "http://github.com/ystskm/node-localelist",
+    "url": "http://github.com/ystskm/grunt-runner",
     "type": "git"
   },
   "scripts": {
