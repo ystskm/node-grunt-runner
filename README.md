@@ -41,24 +41,25 @@ _in this case deploy in __"tasks/run"__ directory_
 	};
 
 ### - if you want add tasks more easily, use utilities
+```js
+var path = require('path'), fs = require('fs'), _ = require('grunt-runner')._;
+var taskname = __dirname.split('/').pop(); // run
 
-	var path = require('path'), fs = require('fs'), _ = require('grunt-runner')._;
-	var taskname = __dirname.split('/').pop(); // run
-	
-	function gruntRunnerTest(grunt, conf, gtask) {
-	
-	  var line = [], done = gtask.async(), stop = function(e) {
-	    grunt.fail.fatal(e);
-	  }, log = function(m) {
-	    _.util.log('[' + gtask.name + '] ' + m);
-	  };
-	
-	  line.push(function() {
-	    log('done.'), done();
-	    grunt.runner.emit('end');
-	  });
-	
-	  _.micropipe(line);
-	
-	}
+function gruntRunnerTest(grunt, conf, gtask) {
+
+  var line = [], done = gtask.async(), stop = function(e) {
+    grunt.fail.fatal(e);
+  }, log = function(m) {
+    _.util.log('[' + gtask.name + '] ' + m);
+  };
+
+  line.push(function() {
+    log('done.'), done();
+    grunt.runner.emit('end');
+  });
+
+  _.micropipe(line);
+
+}
+```
 
