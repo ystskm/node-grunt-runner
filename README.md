@@ -28,9 +28,9 @@ _Default: package.json_
       }
     }
 ```
-####before example for Gruntfile.js, attention that underscore is included.
+####before example for Gruntfile.js, note that underscore is included.
 This object is extended for running tasks.  
-see: __lib/task-utin.js__
+see: __lib/task-util.js__
 ```js
 var _ = require('grunt-runner')._;
 ```
