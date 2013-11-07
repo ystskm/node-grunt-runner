@@ -9,10 +9,13 @@ Install with [npm](http://github.com/isaacs/npm):
 ```sh
     npm install grun
 ```
-## API - runs grunt tasks under "tasks" directory which is just below
+## API - runs grunt tasks under "tasks" directory which is just below __dirname
 ```js
-    var grun = require('grun');
-    grun(__dirname);
+    require('grun')(__dirname)
+```
+,or use alias
+```js
+    require('grun').run(__dirname)
 ```
 ### - example for running configuration
 _Default: package.json_
