@@ -5,7 +5,7 @@ CLI operation is not required to use.
 
 ## Install
 
-Install with [npm](http://github.com/isaacs/npm):
+Install with [npm](http://npmjs.org/):
 ```sh
     npm install grunt-runner
 ```
