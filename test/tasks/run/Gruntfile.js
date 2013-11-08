@@ -1,6 +1,6 @@
 /***/
 var path = require('path'), fs = require('fs'), _ = require('../../../index')._;
-var taskname = __dirname.split('/').pop(); // run
+var taskname = _.taskname(__dirname); // run
 
 module.exports = function(grunt) {
   var tmes = 'Grunt Runner test: ' + taskname;
