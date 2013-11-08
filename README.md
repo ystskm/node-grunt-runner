@@ -49,6 +49,13 @@ module.exports = function(grunt) {
 var path = require('path'), fs = require('fs'), _ = require('grunt-runner')._;
 var taskname = __dirname.split('/').pop(); // run
 
+module.exports = function(grunt) {
+  var tmes = 'Grunt Runner test: ' + taskname;
+  grunt.registerTask(taskname, tmes, _.caught(function() {
+    gruntRunnerTest(grunt, _.mixedConfigure(grunt, taskname), this);
+  }, grunt.fail));
+};
+
 function gruntRunnerTest(grunt, conf, gtask) {
 
   var line = [], done = gtask.async(), stop = function(e) {
