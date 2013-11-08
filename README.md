@@ -36,7 +36,7 @@ see: __lib/task-util.js__
 var _ = require('grunt-runner')._;
 ```
 ### - example for Gruntfile.js
-_in this case deploy in_ __"tasks/run"__ _directory_
+in this case deploy in_ __"tasks/run"__ _directory
 ```js
 module.exports = function(grunt) {
   grunt.registerTask('run', 'test for grunt-runner', function() {
