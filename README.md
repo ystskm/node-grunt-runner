@@ -10,11 +10,11 @@ Install with [npm](http://npmjs.org/):
     npm install grunt-runner
 ```
 ## API - runs grunt tasks under "tasks" directory 
-*assume that directory exists just below executing script file*
+assume that directory exists just below executing script file
 ```js
     require('grunt-runner')(__dirname)
 ```
-,or use alias
+*,or use alias*
 ```js
     require('grunt-runner').run(__dirname)
 ```
