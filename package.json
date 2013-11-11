@@ -15,6 +15,10 @@
     "micro-pipe": "0.1.4",
     "underscore": "1.5.2"
   },
+  "devDependencies": {
+    "grunt-contrib-concat":"*",
+    "grunt-contrib-uglify":"*"
+  },
   "keywords": [
     "util",
     "grunt",
