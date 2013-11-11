@@ -1,7 +1,11 @@
 {
   "name": "grunt-runner-test",
   "version": "0.1.0",
-  "taskList": ["run"],
+  "taskList": ["concat-uglify", "run"],
   "configure": {
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*"
   }
 }

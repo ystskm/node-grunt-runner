@@ -1,7 +1,7 @@
 {
   "name": "grunt-runner",
   "description": "Utility for executing grunt tasks.",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "author": {
     "name": "Yoshitaka Sakamoto",
     "url": "http://github.com/ystskm",
@@ -15,8 +15,11 @@
     "micro-pipe": "0.1.4",
     "underscore": "1.5.2"
   },
-  "devDependencies": {},
-  "keywords": ["util","grunt","runner"],
+  "keywords": [
+    "util",
+    "grunt",
+    "runner"
+  ],
   "main": "index.js",
   "repository": {
     "url": "http://github.com/ystskm/node-grunt-runner",

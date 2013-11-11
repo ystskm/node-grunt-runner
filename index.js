@@ -18,7 +18,8 @@ gruntRunner.run = gruntRunner;
 function gruntRunner(workdirc, taskroot) {
   if(!(this instanceof gruntRunner))
     return new gruntRunner(workdirc, taskroot);
-  this._workdirc = workdirc, this._taskroot = taskroot || Default.Tasks;
+  this._workdirc = workdirc || process.cwd();
+  this._taskroot = taskroot || Default.Tasks;
   Emitter.call(this), this.start();
 }
 inherits(gruntRunner, Emitter);
@@ -32,13 +33,17 @@ for( var i in GRProtos)
 function start() {
   var runner = grunt.runner = this;
   var workdirc = runner._workdirc, taskroot = runner._taskroot;
-  grunt.initConfig({
-    pkg: grunt.file.readJSON(argv.opts.config
-      || path.join(workdirc, Default.Package)),
+  process.chdir(workdirc), grunt.initConfig({
+    pkg: grunt.file.readJSON(argv.opts.config || Default.Package),
   });
-  fs.readdir(path.join(workdirc, taskroot), function(err, files) {
+
+  var config = grunt.config.get(Const.GruntPkg).configure || {};
+  for( var i in config)
+    grunt.config.set(i, config[i]);
+
+  fs.readdir(taskroot, function(err, files) {
     files.forEach(function(taskd) {
-      taskd = path.join(workdirc, taskroot, taskd);
+      taskd = path.join(taskroot, taskd);
       fs.statSync(taskd).isDirectory() && grunt.loadTasks(taskd);
     });
     grunt.task.run(grunt.config.get(Const.GruntPkg).taskList);

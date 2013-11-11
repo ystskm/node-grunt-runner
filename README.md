@@ -18,6 +18,7 @@ assume that directory exists just below executing script file
 ```js
     require('grunt-runner').run(__dirname)
 ```
+*then, note that process.chdir(__dirname) is performed*
 ### - example for running configuration
 _Default: package.json_
 ```js
@@ -36,7 +37,7 @@ see: __lib/task-util.js__
 var _ = require('grunt-runner')._;
 ```
 ### - example for Gruntfile.js
-in this case deploy in_ __"tasks/run"__ _directory
+in this case deploy in __"tasks/run"__ directory
 ```js
 module.exports = function(grunt) {
   grunt.registerTask('run', 'test for grunt-runner', function() {
@@ -74,3 +75,48 @@ function gruntRunnerTest(grunt, conf, gtask) {
 }
 ```
 
+### - Of course contrib-plugins can be used in Gruntfile.js.
+```js
+var path = require('path'), fs = require('fs'), _ = require('../../../index')._;
+var taskname = _.taskname(__dirname); // concat-uglify
+
+module.exports = function(grunt) {
+
+  var tmes = 'Grunt Runner javascript config use case: ' + taskname;
+  var bann = '/*! <%= pkg.name %>'
+    + ' <%= grunt.template.today("dd-mm-yyyy") %> */\n';
+
+  grunt.config.set('concat', {
+    options: {
+      separator: ";"
+    },
+    dist: {
+      src: ["src/*.js"],
+      dest: "dist/<%= pkg.name %>.js"
+    }
+  });
+
+  grunt.config.set('uglify', {
+    options: {
+      banner: bann
+    },
+    dist: {
+      files: {
+        'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+      }
+    }
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.registerTask(taskname, ['concat', 'uglify']);
+
+};
+```
+
+
+#### memo
+I want to request some fixing of [grunt](http://gruntjs.org/) himself functionally but not yet.  
+So that please use grunt-runner with some attention listed below:
+- If same name is defined recursively, task is not ended forever
+- Domain is not separated so that once changing your workspace, saved forever.

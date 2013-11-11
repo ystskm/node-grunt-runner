@@ -1,3 +1,5 @@
 .DS_Store
 .settings
 .project
+test/node_modules
+test/dist
