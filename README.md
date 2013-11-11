@@ -76,7 +76,7 @@ function gruntRunnerTest(grunt, conf, gtask) {
 ```
 
 ### - Of course available contrib-plugins in Gruntfile.js.
-the most confortable way to construct a task.
+the most comfortable way to construct a task.
 ```js
 module.exports = function(grunt) {
 
