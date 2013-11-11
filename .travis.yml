@@ -4,3 +4,8 @@ node_js:
 before_script:
   - "npm install nodeunit"
   - "npm install nodeunit-ci"
+  - "mkdir test/node_modules"
+  - "cd test"
+  - "npm install grunt-contrib-concat"
+  - "npm install grunt-contrib-uglify"
+  - "cd .."
