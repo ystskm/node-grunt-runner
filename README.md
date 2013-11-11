@@ -75,14 +75,10 @@ function gruntRunnerTest(grunt, conf, gtask) {
 }
 ```
 
-### - Of course contrib-plugins can be used in Gruntfile.js.
+### - Of course contrib-plugins is the most easy way to construct a task.
 ```js
-var path = require('path'), fs = require('fs'), _ = require('../../../index')._;
-var taskname = _.taskname(__dirname); // concat-uglify
-
 module.exports = function(grunt) {
 
-  var tmes = 'Grunt Runner javascript config use case: ' + taskname;
   var bann = '/*! <%= pkg.name %>'
     + ' <%= grunt.template.today("dd-mm-yyyy") %> */\n';
 
@@ -109,7 +105,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.registerTask(taskname, ['concat', 'uglify']);
+  grunt.registerTask('concat-uglify', ['concat', 'uglify']);
 
 };
 ```
