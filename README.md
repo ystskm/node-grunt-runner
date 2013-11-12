@@ -26,7 +26,7 @@ Defaults:
 - comconf: {} // the configuration for each tasks. "taskname": { (task options) }
 
 ### - example for running configuration
-_Default: package.json_
+Default reading target: package.json
 ```js
 {
   "name": "grunt-runner-test",
