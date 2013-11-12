@@ -132,6 +132,15 @@ grun(__dirname, {
   }
 });
 ```
+then, Gruntfile.js will be very smart.
+```js
+var taskname = require('grunt-runner')._.taskname(__dirname); // get directory name
+module.exports = function(grunt) {
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.registerTask(taskname, ['concat', 'uglify']);
+};
+```
 
 #### memo
 I want to request some fixing of [grunt](http://gruntjs.org/) himself functionally but not yet.  
