@@ -128,10 +128,8 @@ module.exports = function(grunt) {
 ```js
 grun(__dirname, {
   concat: {
-    "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
+    "banner": "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\\n"
   }
-}).on('end', function() {
-  t.ok(true, 'run'), t.done();
 });
 ```
 
