@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 ```js
 require('grunt-runner')({
   concat: {
-    "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
+    banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
   }
 });
 ```
