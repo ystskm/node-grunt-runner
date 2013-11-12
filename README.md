@@ -7,28 +7,28 @@ CLI operation is not required to use.
 
 Install with [npm](http://npmjs.org/):
 ```sh
-    npm install grunt-runner
+npm install grunt-runner
 ```
 ## API - runs grunt tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
-    require('grunt-runner')(__dirname)
+require('grunt-runner')(__dirname)
 ```
 *,or use alias*
 ```js
-    require('grunt-runner').run(__dirname)
+require('grunt-runner').run(__dirname)
 ```
 *then, process.chdir(__dirname) is performed before begin.*
 ### - example for running configuration
 _Default: package.json_
 ```js
-    {
-      "name": "grunt-runner-test",
-      "version": "0.1.0",
-      "taskList": ["run"],
-      "configure": {
-      }
-    }
+{
+  "name": "grunt-runner-test",
+  "version": "0.1.0",
+  "taskList": ["run"],
+  "configure": {
+  }
+}
 ```
 ####before example for Gruntfile.js, note that underscore is included.
 This object is extended for running tasks.  
@@ -113,16 +113,16 @@ module.exports = function(grunt) {
 
 ### - task config can be pre-given not only package.json but also an execute option
 ```js
-    {
-      "name": "grunt-runner-test",
-      "version": "0.1.0",
-      "taskList": ["run"],
-      "configure": {
-        "concat": {
-          "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
-        }
-      }
+{
+  "name": "grunt-runner-test",
+  "version": "0.1.0",
+  "taskList": ["run"],
+  "configure": {
+    "concat": {
+      "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
     }
+  }
+}
 ```
 *can be given also at the time of run*
 ```js
