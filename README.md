@@ -12,11 +12,11 @@ npm install grunt-runner
 ## API - runs grunt tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
-require('grunt-runner')(__dirname)
+require('grunt-runner')([rootdir][,taskdir][,comconf])
 ```
 *,or use alias*
 ```js
-require('grunt-runner').run(__dirname)
+require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
 *then, process.chdir(__dirname) is performed before begin.*
 ### - example for running configuration
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
 ```
 *same configuration can be given at the time of run*
 ```js
-grun(__dirname, {
+require('grunt-runner')({
   concat: {
     "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
   }
