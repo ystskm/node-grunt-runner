@@ -1,7 +1,7 @@
 {
   "name": "grunt-runner",
   "description": "Extend convenience for executing grunt tasks, available without CLI.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": {
     "name": "Yoshitaka Sakamoto",
     "url": "http://github.com/ystskm",
@@ -13,6 +13,7 @@
     "time-calc": "0.5.0",
     "named-argv": "0.1.0",
     "micro-pipe": "0.1.4",
+    "event-drive": "1.0.0",
     "underscore": "1.5.2"
   },
   "keywords": [
