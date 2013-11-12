@@ -11,15 +11,19 @@ var Default = {
   Package: 'package.json'
 };
 
-module.exports = gruntRunner;
-gruntRunner._ = require('./lib/task-util');
-gruntRunner.run = gruntRunner;
+var _ = gruntRunner._ = require('./lib/task-util');
+module.exports = gruntRunner, gruntRunner.run = gruntRunner;
 
-function gruntRunner(workdirc, taskroot) {
+function gruntRunner(workdirc, taskroot, configure) {
   if(!(this instanceof gruntRunner))
-    return new gruntRunner(workdirc, taskroot);
+    return new gruntRunner(workdirc, taskroot, configure);
+  if(workdirc && typeof workdirc != 'string')
+    configure = workdirc, taskroot = null, workdirc = null;
+  else if(workdirc && taskroot && typeof taskroot != 'string')
+    configure = taskroot, taskroot = null;
   this._workdirc = workdirc || process.cwd();
   this._taskroot = taskroot || Default.Tasks;
+  this.configure = configure || {};
   Emitter.call(this), this.start();
 }
 inherits(gruntRunner, Emitter);
@@ -37,7 +41,8 @@ function start() {
     pkg: grunt.file.readJSON(argv.opts.config || Default.Package),
   });
 
-  var config = grunt.config.get(Const.GruntPkg).configure || {};
+  var config = _.extend({}, grunt.config.get(Const.GruntPkg).configure,
+    runner.configure);
   for( var i in config)
     grunt.config.set(i, config[i]);
 

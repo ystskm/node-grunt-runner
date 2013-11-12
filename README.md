@@ -18,7 +18,7 @@ assume that directory exists just below executing script file
 ```js
     require('grunt-runner').run(__dirname)
 ```
-*then, note that process.chdir(__dirname) is performed*
+*then, process.chdir(__dirname) is performed before begin.*
 ### - example for running configuration
 _Default: package.json_
 ```js
@@ -75,8 +75,8 @@ function gruntRunnerTest(grunt, conf, gtask) {
 }
 ```
 
-### - Of course available contrib-plugins in Gruntfile.js.
-the most comfortable way to construct a task.
+### - Of course, available "contrib-plugins" in Gruntfile.js!
+*the most comfortable way to construct a task.*
 ```js
 module.exports = function(grunt) {
 
@@ -111,9 +111,34 @@ module.exports = function(grunt) {
 };
 ```
 
+### - task config can be pre-given not only package.json but also an execute option
+```js
+    {
+      "name": "grunt-runner-test",
+      "version": "0.1.0",
+      "taskList": ["run"],
+      "configure": {
+        "concat": {
+          "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
+        }
+      }
+    }
+```
+*can be given also at the time of run*
+```js
+grun(__dirname, {
+  concat: {
+    "banner": "/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n"
+  }
+}).on('end', function() {
+  t.ok(true, 'run'), t.done();
+});
+```
 
 #### memo
 I want to request some fixing of [grunt](http://gruntjs.org/) himself functionally but not yet.  
-So that please use grunt-runner with some attention listed below:
+So that please use grunt-runner with paying some attention listed below:
 - If same name is defined recursively, task is not ended forever
 - Domain is not separated so that once changing your workspace, saved forever.
+- "node_modules" requires at the root of your project directory for loadNpmTasks
+
