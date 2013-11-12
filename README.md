@@ -18,7 +18,7 @@ require('grunt-runner')([rootdir][,taskdir][,comconf])
 ```js
 require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
-*then, process.chdir(__dirname) is performed before begin.*
+*if a string "rootdir" is given, process.chdir(rootdir) is performed before begin.*
 ### - example for running configuration
 _Default: package.json_
 ```js
