@@ -124,7 +124,7 @@ module.exports = function(grunt) {
   }
 }
 ```
-*can be given also at the time of run*
+*same configuration can be given at the time of run*
 ```js
 grun(__dirname, {
   concat: {
