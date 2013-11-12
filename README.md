@@ -138,5 +138,8 @@ I want to request some fixing of [grunt](http://gruntjs.org/) himself functional
 So that please use grunt-runner with paying some attention listed below:
 - If same name is defined recursively, task is not ended forever
 - Domain is not separated so that once changing your workspace, saved forever.
-- "node_modules" requires at the root of your project directory for loadNpmTasks
+- "node_modules" requires at the root of your project directory for loadNpmTasks  
+  
+If you know the way to avoid them by the function (or option) of grunt,
+let [me](http://liberty-technology.biz/) know, please.
 
