@@ -111,7 +111,7 @@ module.exports = function(grunt) {
 };
 ```
 
-### - task config can be pre-given not only package.json but also an execute option
+### - task config can be pre-given not only via package.json but also as an execute option
 ```js
 {
   "name": "grunt-runner-test",
