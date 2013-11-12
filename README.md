@@ -23,7 +23,7 @@ require('grunt-runner').run([rootdir][,taskdir][,comconf])
 Defaults:
 - rootdir: process.cwd()
 - taskdir: 'tasks'
-- comconf: {} // the configuration for each tasks. "taskname": {(task options)}
+- comconf: {} // the configuration for each tasks. "taskname": { (task options) }
 
 ### - example for running configuration
 _Default: package.json_
