@@ -119,7 +119,7 @@ module.exports = function(grunt) {
   "taskList": ["run"],
   "configure": {
     "concat": {
-      "banner": "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> *\/\n"
+      "banner": "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\\n"
     }
   }
 }
