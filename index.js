@@ -35,23 +35,33 @@ for( var i in GRProtos)
   gruntRunner.prototype[i] = GRProtos[i];
 
 function start() {
+
   var runner = grunt.runner = this;
   var workdirc = runner._workdirc, taskroot = runner._taskroot;
-  process.chdir(workdirc), grunt.initConfig({
-    pkg: grunt.file.readJSON(argv.opts.config || Default.Package),
-  });
+  process.chdir(workdirc), grunt.config(Const.GruntPkg, grunt.file
+      .readJSON(argv.opts.config || Default.Package));
 
-  var config = _.extend({}, grunt.config.get(Const.GruntPkg).configure,
+  var tconf = _.extend({}, grunt.config.get(Const.GruntPkg).configure,
     runner.configure);
-  for( var i in config)
-    grunt.config.set(i, config[i]);
+  for( var i in tconf)
+    grunt.config.set(i, tconf[i]);
 
   fs.readdir(taskroot, function(err, files) {
-    files.forEach(function(taskd) {
+
+    var tasks = [];
+    !err && files.forEach(function(taskd) {
       taskd = path.join(taskroot, taskd);
-      fs.statSync(taskd).isDirectory() && grunt.loadTasks(taskd);
+      fs.statSync(taskd).isDirectory() && (function() {
+        tasks.push(taskd.split('/').pop()), grunt.loadTasks(taskd);
+      })();
     });
-    grunt.task.run(grunt.config.get(Const.GruntPkg).taskList);
-    grunt.task.start();
+
+    var taskList = grunt.config.get(Const.GruntPkg).taskList || tasks;
+    (Array.isArray(taskList) && taskList.length ? function() {
+      grunt.task.run(taskList), grunt.task.start();
+    }: function() {
+      grunt.task.start(); // execute tasks already in queue
+    })();
+
   });
 }
