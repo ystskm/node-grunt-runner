@@ -79,7 +79,7 @@ function start() {
 
     // "_finish" is internal event for proceed.
     runner.on('_finish', function(taskname) {
-      runnter.emit('finish', taskname), nextTaskGroup();
+      runner.emit('finish', taskname), nextTaskGroup();
     });
 
     nextTaskGroup();
