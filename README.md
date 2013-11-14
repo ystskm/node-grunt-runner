@@ -1,5 +1,7 @@
 # grunt-runner, grun
-
+  
+[![Build status](https://travis-ci.org/AvnerCohen/comma-it.png)](https://travis-ci.org/AvnerCohen/comma-it)  
+  
 Support for executing grunt tasks.  
 CLI operation is not required to use.
 
