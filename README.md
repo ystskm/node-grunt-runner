@@ -11,7 +11,7 @@ Install with [npm](http://npmjs.org/):
 ```sh
 npm install grunt-runner
 ```
-## API - runs grunt tasks under "tasks" directory 
+## API - runs and pipe grunt tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
 runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
@@ -25,11 +25,11 @@ runner = require('grunt-runner').run([rootdir][,taskdir][,comconf])
 __rootdir__ (String) `process.cwd()` optional  
 The working place for this runner. process.chdir(rootdir) is performed before begin.  
   
-__taskdir__(String) `'tasks'` optional  
+__taskdir__ (String) `'tasks'` optional  
 The directory where tasks used in for this runner  
 Note that if you want to specify "taskdir" but not specify "rootdir", please set null for the first argument.  
   
-__comconf__(Object) `{}` optional  
+__comconf__ (Object) `{}` optional  
 The configuration for each tasks.  
 e.g. { "taskname": { (grunt task configuration) } }
   
@@ -38,7 +38,7 @@ A runner is an instance of EventEmitter.
   
 type `finish`  
 Emit when end for each task.  
-    runner.on('finish', function(taskname) { })  
+    runner.on('finish', function(taskname) { ... })  
   
 type `end`  
 Emit when all taskList is ended.  
@@ -61,8 +61,15 @@ __This file is not required. If not provide (and the "taskList" is not provided,
 (2) If tasks are listed, run the tasks.  
 (3) If no task is discovered, grunt.start() is simply called. Then tasks which
 are already grunt.regist(Multi)Task()-ed are started.  
+
+__You can begin grunt run simply by giving an Array for the first argument.__  
+*In this case, you should do grunt.initConfig() yourself.*  
+```js
+// Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
+require('grunt-runner')(['concat', 'uglify']);
+```
   
-####before example for Gruntfile.js, note that underscore is included.
+#### before example for Gruntfile.js, note that underscore is included.
 This object is extended for running tasks.  
 see: __lib/task-util.js__
 ```js
