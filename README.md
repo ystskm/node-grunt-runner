@@ -38,11 +38,15 @@ A runner is an instance of EventEmitter.
   
 type `finish`  
 Emit when end for each task.  
-    runner.on('finish', function(taskname) { ... })  
+```js
+runner.on('finish', function(taskname) { ... })  
+```
   
 type `end`  
 Emit when all taskList is ended.  
-    runner.on('end', function() { ... })  
+```js
+runner.on('end', function() { ... })  
+```
   
 ### - example for running configuration
 Default reading target: *package.json*  
