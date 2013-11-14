@@ -43,7 +43,7 @@ runner.on('finish', function(taskname) { ... })
 ```
   
 type `end`  
-Emit when all taskList is ended.  
+Emit when all in "taskList" are ended.  
 ```js
 runner.on('end', function() { ... })  
 ```
