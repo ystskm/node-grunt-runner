@@ -58,7 +58,7 @@ function start() {
   var running = null, tasks = {}
   grunt.task.options({
     done: function() {
-      runner.emit('finish', running);
+      runner.emit('_finish', running);
     }
   });
 
@@ -76,7 +76,13 @@ function start() {
 
     var taskList = grunt.config.get(Const.GruntPkg).taskList
       || Object.keys(tasks);
-    runner.on('finish', nextTaskGroup), nextTaskGroup();
+
+    // "_finish" is internal event for proceed.
+    runner.on('_finish', function(taskname) {
+      runnter.emit('finish', taskname), nextTaskGroup();
+    });
+
+    nextTaskGroup();
 
     function nextTaskGroup() {
 

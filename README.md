@@ -14,26 +14,32 @@ npm install grunt-runner
 ## API - runs grunt tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
-require('grunt-runner')([rootdir][,taskdir][,comconf])
+runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
 ```
 *,or use alias*
 ```js
-require('grunt-runner').run([rootdir][,taskdir][,comconf])
+runner = require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
-*if a string "rootdir" is given, process.chdir(rootdir) is performed before begin.*  
+**  
   
-Default:  
-`rootdir` *process.cwd()*  
-`taskdir` *'tasks'*  
-`comconf` *{}*  
-// the configuration for each tasks. "taskname": { (grunt task configuration) }
+###Arguments  
+__rootdir__(String) `process.cwd()` optional  
+The working place for this runner. process.chdir(rootdir) is performed before begin.  
+__taskdir__(String) `'tasks'` optional  
+The directory where tasks used in for this runner  
+Note that if you want to specify "taskdir" but not specify "rootdir", please set null for the first argument.  
+__comconf__(Object) `{}` optional  
+The configuration for each tasks.  
+e.g. { "taskname": { (grunt task configuration) } }
 
-Event:  
-`finish`  
-emitted for each task ending. function(taskname) { }  
-`end`  
-emitted when all taskList is ended.  
-
+###Event
+A runner is an instance of EventEmitter.  
+type `finish`  
+Emit when end for each task.  
+    runner.on('finish', function(taskname) { })  
+type `end`  
+Emit when all taskList is ended.  
+    runner.on('end', function() { ... })  
 ### - example for running configuration
 Default reading target: *package.json*  
 ```js
