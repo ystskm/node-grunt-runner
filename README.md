@@ -11,7 +11,15 @@ Install with [npm](http://npmjs.org/):
 ```sh
 npm install grunt-runner
 ```
-## API - runs and pipe grunt tasks under "tasks" directory 
+
+## API - Simplest running  
+*In this case, you should do grunt.initConfig() yourself.*  
+```js
+// Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
+require('grunt-runner')(['concat', 'uglify']);
+```
+
+## API - runs and pipe tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
 runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
@@ -65,13 +73,6 @@ __This file is not required. If not provide (and the "taskList" is not provided,
 (2) If tasks are listed, run the tasks.  
 (3) If no task is discovered, grunt.start() is simply called. Then tasks which
 are already grunt.regist(Multi)Task()-ed are started.  
-
-__You can begin grunt run simply by giving an Array for the first argument.__  
-*In this case, you should do grunt.initConfig() yourself.*  
-```js
-// Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
-require('grunt-runner')(['concat', 'uglify']);
-```
   
 #### before example for Gruntfile.js, note that underscore is included.
 This object is extended for running tasks.  
