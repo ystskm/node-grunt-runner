@@ -20,26 +20,30 @@ runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
 ```js
 runner = require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
-**  
   
 ###Arguments  
-__rootdir__(String) `process.cwd()` optional  
+__rootdir__ (String) `process.cwd()` optional  
 The working place for this runner. process.chdir(rootdir) is performed before begin.  
+  
 __taskdir__(String) `'tasks'` optional  
 The directory where tasks used in for this runner  
 Note that if you want to specify "taskdir" but not specify "rootdir", please set null for the first argument.  
+  
 __comconf__(Object) `{}` optional  
 The configuration for each tasks.  
 e.g. { "taskname": { (grunt task configuration) } }
-
+  
 ###Event
 A runner is an instance of EventEmitter.  
+  
 type `finish`  
 Emit when end for each task.  
     runner.on('finish', function(taskname) { })  
+  
 type `end`  
 Emit when all taskList is ended.  
     runner.on('end', function() { ... })  
+  
 ### - example for running configuration
 Default reading target: *package.json*  
 ```js
