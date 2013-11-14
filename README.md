@@ -2,7 +2,7 @@
   
 [![Build status](https://travis-ci.org/ystskm/node-grunt-runner.png)](https://travis-ci.org/ystskm/node-grunt-runner)  
   
-Support for executing grunt tasks.  
+Support for pipeline execution of grunt tasks.  
 CLI operation is not required to use.
 
 ## Install
@@ -22,17 +22,24 @@ require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
 *if a string "rootdir" is given, process.chdir(rootdir) is performed before begin.*  
   
-Defaults:
-- rootdir: *process.cwd()*
-- taskdir: *'tasks'*
-- comconf: *{}* // the configuration for each tasks. "taskname": { (grunt task configuration) }
+Default:
+`rootdir` *process.cwd()*
+`taskdir` *'tasks'*
+`comconf` *{}*  
+// the configuration for each tasks. "taskname": { (grunt task configuration) }
+
+Event:
+`finish`  
+emitted for each task ending. function(taskname) { }
+`end`  
+emitted when all taskList is ended.
 
 ### - example for running configuration
 Default reading target: *package.json*  
 ```js
 {
   "name": "grunt-runner-test",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "taskList": ["run"],
   "configure": {
   }

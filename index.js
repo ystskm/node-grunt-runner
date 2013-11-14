@@ -55,26 +55,47 @@ function start() {
   for( var i in tconf)
     grunt.config.set(i, tconf[i]);
 
+  var running = null, tasks = {}
+  grunt.task.options({
+    done: function() {
+      runner.emit('finish', running);
+    }
+  });
+
   fs.readdir(taskroot, function(err, files) {
 
-    var tasks = [];
-    !err && files.forEach(function(taskd) {
+    if(err)
+      return _runTaskList(); // execute tasks already in queue
+
+    files.forEach(function(taskd) {
       taskd = path.join(taskroot, taskd);
       fs.statSync(taskd).isDirectory() && (function() {
-        tasks.push(taskd.split('/').pop()), grunt.loadTasks(taskd);
+        tasks[_.taskname(taskd)] = taskd;
       })();
     });
 
-    var taskList = grunt.config.get(Const.GruntPkg).taskList || tasks;
-    (Array.isArray(taskList) && taskList.length ? function() {
-      _runTaskList(taskList);
-    }: function() {
-      grunt.task.start(); // execute tasks already in queue
-    })();
+    var taskList = grunt.config.get(Const.GruntPkg).taskList
+      || Object.keys(tasks);
+    runner.on('finish', nextTaskGroup), nextTaskGroup();
+
+    function nextTaskGroup() {
+
+      if(taskList.length === 0)
+        return runner.emit('end');
+
+      var taskn = taskList.shift();
+      if(!tasks[taskn])
+        return nextTaskGroup();
+
+      grunt.loadTasks(tasks[taskn]);
+      running = taskn, _runTaskList([taskn]);
+
+    }
 
   });
 }
 
 function _runTaskList(taskList) {
-  grunt.task.run(taskList), grunt.task.start();
+  taskList && grunt.task.run(taskList);
+  grunt.task.start();
 }

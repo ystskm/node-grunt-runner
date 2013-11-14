@@ -18,7 +18,6 @@ function gruntRunnerTest(grunt, conf, gtask) {
 
   line.push(function() {
     log('done.'), done();
-    grunt.runner.emit('end');
   });
 
   _.micropipe(line);
