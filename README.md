@@ -27,12 +27,6 @@ Defaults:
 
 ### - example for running configuration
 Default reading target: *package.json*  
-__This file is not required. If not provide (and the taskList is not provided, )__  
-(1) Tasks are listed up by the directory list in `taskdir`.  
-(2) If tasks are listed, run the tasks.  
-(3) If no task is discovered, grunt.start() is simply called. Then tasks which
-are already grunt.regist(Multi)Task()-ed are started.  
-  
 ```js
 {
   "name": "grunt-runner-test",
@@ -42,6 +36,13 @@ are already grunt.regist(Multi)Task()-ed are started.
   }
 }
 ```
+
+__This file is not required. If not provide (and the taskList is not provided, )__  
+(1) Tasks are listed up by the directory list in `taskdir`.  
+(2) If tasks are listed, run the tasks.  
+(3) If no task is discovered, grunt.start() is simply called. Then tasks which
+are already grunt.regist(Multi)Task()-ed are started.  
+  
 ####before example for Gruntfile.js, note that underscore is included.
 This object is extended for running tasks.  
 see: __lib/task-util.js__
