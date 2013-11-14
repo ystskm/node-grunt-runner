@@ -26,7 +26,7 @@ Defaults:
 - comconf: {} // the configuration for each tasks. "taskname": { (grunt task configuration) }
 
 ### - example for running configuration
-Default reading target: package.json  
+Default reading target: *package.json*  
 __This file is not required. If not provide (and the taskList is not provided, )__  
 (1) Tasks are listed up by the directory list in `taskdir`.  
 (2) If tasks are listed, run the tasks.  
