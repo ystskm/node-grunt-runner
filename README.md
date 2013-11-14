@@ -13,7 +13,6 @@ npm install grunt-runner
 ```
 
 ## API - Simplest running  
-*In this case, you should do grunt.initConfig() yourself.*  
 ```js
 // Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
 require('grunt-runner')(['concat', 'uglify']);
