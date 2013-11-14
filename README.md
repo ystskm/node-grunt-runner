@@ -137,7 +137,7 @@ module.exports = function(grunt) {
 ```js
 {
   "name": "grunt-runner-test",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "taskList": ["run"],
   "configure": {
     "concat": {
