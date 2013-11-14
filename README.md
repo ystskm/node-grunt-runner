@@ -22,17 +22,17 @@ require('grunt-runner').run([rootdir][,taskdir][,comconf])
 ```
 *if a string "rootdir" is given, process.chdir(rootdir) is performed before begin.*  
   
-Default:
-`rootdir` *process.cwd()*
-`taskdir` *'tasks'*
+Default:  
+`rootdir` *process.cwd()*  
+`taskdir` *'tasks'*  
 `comconf` *{}*  
 // the configuration for each tasks. "taskname": { (grunt task configuration) }
 
-Event:
+Event:  
 `finish`  
-emitted for each task ending. function(taskname) { }
+emitted for each task ending. function(taskname) { }  
 `end`  
-emitted when all taskList is ended.
+emitted when all taskList is ended.  
 
 ### - example for running configuration
 Default reading target: *package.json*  
