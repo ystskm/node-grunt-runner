@@ -37,7 +37,6 @@ module.exports = nodeunit.testCase({
   'run': function(t) {
     var taskList = ['concat-uglify', 'run'];
     grun(__dirname, js_conf).on('finish', function(taskname) {
-      console.error('FINISH: ' + taskname);
       t.equal(taskname, taskList.shift());
     }).on('end', function() {
       t.ok(true, 'run');
