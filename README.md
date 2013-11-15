@@ -19,14 +19,14 @@ require('grunt-runner')(['concat', 'uglify']);
 ```
 *e.g.*
 ```js
-var g = require('grunt');
-g.initConfig({
+var gr = require('grunt-runner');
+gr.initConfig({
   concat: { /*(concat's config)*/ },
   uglify: { /*(uglify's config)*/ }
-});
-require('grunt-runner').run(['npm:grunt-contrib-concat'
-                           , 'npm:grunt-contrib-uglify'
-                           , 'concat', 'uglify']);
+}).run([
+  'npm:grunt-contrib-concat'
+, 'npm:grunt-contrib-uglify'
+, 'concat', 'uglify']);
 ```
 
 ## API - runs and pipe tasks under "tasks" directory 
@@ -88,7 +88,7 @@ Default reading target: *package.json*
 ```js
 {
   "name": "grunt-runner-test",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "taskList": ["run"],
   "configure": {
   }
@@ -138,7 +138,6 @@ function gruntRunnerTest(grunt, conf, gtask) {
 
   line.push(function() {
     log('done.'), done();
-    grunt.runner.emit('end');
   });
 
   _.micropipe(line);

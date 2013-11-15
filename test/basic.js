@@ -35,31 +35,23 @@ js_conf.uglify = {
 module.exports = nodeunit.testCase({
 
   'notexist': function(t) {
-
     var taskList = ['notexist'];
-    grun.initConfig(js_conf);
-
-    grun.run(__dirname, taskList).on('error', function(e, task) {
+    grun.initConfig(js_conf).run(__dirname, taskList).on('error', function(e, task) {
       t.ok(e instanceof Error, 'notexist: First argument is Error.');
       t.equal(e.message, 'Task "notexist" not found.');
       t.strictEqual(task.name, null);
       grun.initConfig(), t.done();
     });
-
   },
 
   'loadnpm': function(t) {
-
     var taskList = ['npm:grunt-contrib-concat', 'concat'];
-    grun.initConfig(js_conf);
-
-    grun.run(__dirname, taskList).on('finish', function(taskname) {
+    grun.initConfig(js_conf).run(__dirname, taskList).on('finish', function(taskname) {
       t.equal(taskname, taskList.shift()), console.log('finish ' + taskname)
     }).on('end', function() {
       t.ok(true, 'loadnpm');
       grun.initConfig(), t.done();
     });
-
   },
 
   'run': function(t) {

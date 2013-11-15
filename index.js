@@ -170,7 +170,7 @@ function config(k, v) {
 }
 
 function initConfig(v) {
-  grunt.config.init(v || {});
+  return grunt.config.init(v || {}), gruntRunner;
 }
 
 function _asynchronous(fn) {
