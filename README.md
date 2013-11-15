@@ -21,8 +21,8 @@ require('grunt-runner')(['concat', 'uglify']);
 ```js
 var g = require('grunt');
 g.initConfig({
-  concat: { (concat's config) },
-  uglify: { (uglify's config) }
+  concat: { /*(concat's config)*/ },
+  uglify: { /*(uglify's config)*/ }
 });
 g.loadNpmTasks('grunt-contrib-concat');
 g.loadNpmTasks('grunt-contrib-uglify');
