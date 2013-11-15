@@ -75,14 +75,16 @@ function start() {
 
     // "_finish" is internal event for proceed.
     runner.on('_finish', nextTaskGroup);
-    
+
     // execute first task
     nextTaskGroup();
 
     function nextTaskGroup() {
 
       if(taskList.length === 0)
-        return _initGrunt(), runner.emit('end');
+        return _asynchronous(function() {
+          _initGrunt(), runner.emit('end');
+        });
 
       var taskn = taskList.shift();
       if(!tasks[taskn])
@@ -108,12 +110,20 @@ function _setupEventOptions() {
   });
 
   grunt.runner.on('_finish', function(taskname) {
-    grunt.runner.emit('finish', taskname);
+    _asynchronous(function() {
+      grunt.runner.emit('finish', taskname);
+    });
   });
   grunt.runner.on('_error', function(e, task) {
-    grunt.runner.emit('error', e, task);
+    _asynchronous(function() {
+      grunt.runner.emit('error', e, task);
+    });
   });
 
+}
+
+function _asynchronous(fn) {
+  (setImmediate || process.nextTick)(fn) // force asynchronous for event bind.
 }
 
 function _initGrunt() {

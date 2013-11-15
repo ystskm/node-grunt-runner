@@ -60,6 +60,13 @@ Emit when end for each task.
 runner.on('finish', function(taskname) { ... })  
 ```
   
+type `error`  
+Emit when error occurs.  
+If no handler is binded, the error will be thrown.  
+```js
+runner.on('error', function(e, taskstat) { ... })  
+```
+
 type `end`  
 Emit when all in "taskList" are ended.  
 ```js
