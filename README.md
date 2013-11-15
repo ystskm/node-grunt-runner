@@ -24,9 +24,9 @@ g.initConfig({
   concat: { /*(concat's config)*/ },
   uglify: { /*(uglify's config)*/ }
 });
-g.loadNpmTasks('grunt-contrib-concat');
-g.loadNpmTasks('grunt-contrib-uglify');
-require('grunt-runner').run(['concat', 'uglify']);
+require('grunt-runner').run(['npm:grunt-contrib-concat'
+                           , 'npm:grunt-contrib-uglify'
+                           , 'concat', 'uglify']);
 ```
 
 ## API - runs and pipe tasks under "tasks" directory 
@@ -71,6 +71,16 @@ type `end`
 Emit when all in "taskList" are ended.  
 ```js
 runner.on('end', function() { ... })  
+```
+
+type `(taskname).(eventname)`
+All of `grunt.event.emit` event will pass runner as this each type.  
+When you executing `(taskname):(tag)` task, `:(tag)` will be ignored.  
+```js
+// in taskname "hoge"'s Gruntfile.js
+grunt.event.emit('ok', 1, 2, 3);
+// catch by runner
+runner.on('hoge.ok', function() { console.log(arguments) }) // [1, 2, 3]
 ```
   
 ### - example for running configuration
