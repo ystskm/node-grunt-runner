@@ -62,7 +62,7 @@ runner.on('finish', function(taskname) { ... })
   
 type `error`  
 Emit when error occurs.  
-If no handler is binded, the error will be thrown.  
+If no handler is binded, the error will be thrown as you know.  
 ```js
 runner.on('error', function(e, taskstat) { ... })  
 ```
