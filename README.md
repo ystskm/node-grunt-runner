@@ -12,7 +12,7 @@ Install with [npm](http://npmjs.org/):
 npm install grunt-runner
 ```
 
-## API - Simplest running  
+## API - simplest running  
 ```js
 // Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
 require('grunt-runner')(['concat', 'uglify']);
