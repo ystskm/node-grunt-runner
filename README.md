@@ -17,6 +17,17 @@ npm install grunt-runner
 // Let's run the regist(Multi)Task()-ed tasks 'concat' and 'uglify'
 require('grunt-runner')(['concat', 'uglify']);
 ```
+*e.g.*
+```js
+var g = require('grunt');
+g.initConfig({
+  concat: { (concat's config) },
+  uglify: { (uglify's config) }
+});
+g.loadNpmTasks('grunt-contrib-concat');
+g.loadNpmTasks('grunt-contrib-uglify');
+require('grunt-runner').run(['concat', 'uglify']);
+```
 
 ## API - runs and pipe tasks under "tasks" directory 
 assume that directory exists just below executing script file
