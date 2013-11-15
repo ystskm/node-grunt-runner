@@ -89,13 +89,14 @@ function start() {
       })();
     });
 
-    var taskList = runner._taskList = grunt.config.get(Const.GruntPkg).taskList
+    runner._taskList = grunt.config.get(Const.GruntPkg).taskList
       || Object.keys(tasks);
 
     // "_finish" is internal event for proceed.
     runner.on('_finish', nextTaskGroup);
 
     // execute first task
+    var taskList = [].concat(runner._taskList);
     nextTaskGroup();
 
     function nextTaskGroup() {
