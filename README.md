@@ -33,8 +33,8 @@ __rootdir__ (String) `process.cwd()` optional
 The working place for this runner. process.chdir(rootdir) is performed before begin.  
   
 __taskdir__ (String) `'tasks'` optional  
-The directory where tasks used in for this runner  
-Note that if you want to specify "taskdir" but not specify "rootdir", please set null for the first argument.  
+The directory where tasks used in for this runner.  
+Note that if you want to specify __taskdir__ but not specify __rootdir__, please set `null` for the first argument.  
   
 __comconf__ (Object) `{}` optional  
 The configuration for each tasks.  
