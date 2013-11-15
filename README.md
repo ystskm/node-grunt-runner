@@ -24,8 +24,8 @@ gr.initConfig({
   concat: { /*(concat's config)*/ },
   uglify: { /*(uglify's config)*/ }
 }).run([
-  'npm:grunt-contrib-concat'
-, 'npm:grunt-contrib-uglify'
+  'npm:grunt-contrib-concat'  // grunt.loadNpmTasks('grunt-contrib-concat')
+, 'npm:grunt-contrib-uglify'  // grunt.loadNpmTasks('grunt-contrib-uglify')
 , 'concat', 'uglify']);
 ```
 
