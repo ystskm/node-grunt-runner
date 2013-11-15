@@ -11,6 +11,7 @@ var Default = {
   Package: 'package.json'
 };
 
+var running = null;
 var _ = gruntRunner._ = require('./lib/task-util');
 module.exports = gruntRunner, gruntRunner.run = gruntRunner;
 
@@ -20,9 +21,10 @@ function gruntRunner(workdirc, taskroot, configure) {
     return new gruntRunner(workdirc, taskroot, configure);
 
   Emitter.call(grunt.runner = this);
+  _setupEventOptions();
 
   if(Array.isArray(workdirc)) // runTaskList
-    return _runTaskList(workdirc);
+    return _runTaskList(running = workdirc);
 
   if(workdirc && typeof workdirc != 'string')
     configure = workdirc, taskroot = null, workdirc = null;
@@ -55,13 +57,7 @@ function start() {
   for( var i in tconf)
     grunt.config.set(i, tconf[i]);
 
-  var running = null, tasks = {}
-  grunt.task.options({
-    done: function() {
-      runner.emit('_finish', running);
-    }
-  });
-
+  var tasks = {};
   fs.readdir(taskroot, function(err, files) {
 
     if(err)
@@ -78,16 +74,15 @@ function start() {
       || Object.keys(tasks);
 
     // "_finish" is internal event for proceed.
-    runner.on('_finish', function(taskname) {
-      runner.emit('finish', taskname), nextTaskGroup();
-    });
-
+    runner.on('_finish', nextTaskGroup);
+    
+    // execute first task
     nextTaskGroup();
 
     function nextTaskGroup() {
 
       if(taskList.length === 0)
-        return runner.emit('end');
+        return _initGrunt(), runner.emit('end');
 
       var taskn = taskList.shift();
       if(!tasks[taskn])
@@ -99,6 +94,30 @@ function start() {
     }
 
   });
+}
+
+function _setupEventOptions() {
+
+  grunt.task.options({
+    done: function() {
+      grunt.runner.emit('_finish', running);
+    },
+    error: function(e) {
+      grunt.runner.emit('_error', e, this);
+    }
+  });
+
+  grunt.runner.on('_finish', function(taskname) {
+    grunt.runner.emit('finish', taskname);
+  });
+  grunt.runner.on('_error', function(e, task) {
+    grunt.runner.emit('error', e, task);
+  });
+
+}
+
+function _initGrunt() {
+  running = null, delete grunt.runner;
 }
 
 function _runTaskList(taskList) {
