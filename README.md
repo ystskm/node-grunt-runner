@@ -76,10 +76,12 @@ runner.on('end', function() { ... })
 type `(taskname).(eventname)`
 All of `grunt.event.emit` event will pass runner as this each type.  
 When you executing `(taskname):(tag)` task, `:(tag)` will be ignored.  
+in taskname "hoge"'s Gruntfile.js
 ```js
-// in taskname "hoge"'s Gruntfile.js
 grunt.event.emit('ok', 1, 2, 3);
-// catch by runner
+```
+You can catch the event by runner.on
+```js
 runner.on('hoge.ok', function() { console.log(arguments) }) // [1, 2, 3]
 ```
   
