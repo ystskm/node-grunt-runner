@@ -21,6 +21,7 @@ require('grunt-runner')(['concat', 'uglify']);
 ```js
 var gr = require('grunt-runner');
 gr.initConfig({
+  pkg: { name:"grunt-runner-test" },
   concat: { /*(concat's config)*/ },
   uglify: { /*(uglify's config)*/ }
 }).run([
