@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "nodeunit": "*",
-    "nodeunit-ci": "*"
+    "nodeunit-ci": ">=1.0.0"
   },
   "keywords": [
     "util",

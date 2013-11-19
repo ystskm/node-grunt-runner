@@ -47,7 +47,16 @@ function gruntRunner(workdirc, taskroot, configure) {
     return _runTaskList([].concat(taskList));
 
   this._workdirc = workdirc || process.cwd();
-  this._taskroot = taskroot || Default.Tasks;
+
+  // package.json,tasks
+  if(typeof taskroot == 'string') {
+    taskroot = taskroot.split(',');
+    // only "taskroot" specify
+    if(taskroot.length == 1 && !/\.json$/.test(taskroot[0]))
+      taskroot.unshift('');
+  }
+  this._packagef = taskroot && taskroot[0] || Default.Package;
+  this._taskroot = taskroot && taskroot[1] || Default.Tasks;
   this.configure = configure || {};
   this.start();
 
@@ -69,7 +78,7 @@ function start() {
 
   runner._current = null, runner._noerror = true;
   grunt.config(Const.GruntPkg, grunt.file.readJSON(argv.opts.config
-    || Default.Package));
+    || runner._packagef));
 
   var tconf = _.extend({}, grunt.config.get(Const.GruntPkg).configure,
     runner.configure);
