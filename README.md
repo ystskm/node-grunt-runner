@@ -85,6 +85,10 @@ You can catch the event by runner.on
 ```js
 runner.on('hoge.ok', function() { console.log(arguments) }) // [1, 2, 3]
 ```
+You can also catch this event for type `data`.
+```js
+runner.on('data', function(d) { console.log(d) }) // ['hoge.ok', 1, 2, 3]
+```
   
 ### - example for running configuration
 Default reading target: *package.json*  
