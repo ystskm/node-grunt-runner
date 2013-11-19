@@ -129,10 +129,10 @@ function _setupEventOptions() {
 
   grunt.event.on('*', function() {
     var ee = grunt.runner, evt = this.event, task = grunt.task.current;
-    var tnam = task.name.replace(/:.+$/, '');
-    var args = [task.name + '.' + evt].concat(_.toArray(arguments));
+    var tnam = task.name.replace(/:.+$/, ''), args = _.toArray(arguments);
     _asynchronous(function() {
-      ee.emit.apply(ee, args);
+      args = [tnam + '.' + evt].concat(args);
+      ee.emit.apply(ee, args), ee.emit('data', args);
     });
   });
   grunt.runner.on('_finish', function(taskname) {
