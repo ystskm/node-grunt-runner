@@ -77,14 +77,19 @@ function start() {
     throw new Error('Unexpected condition. Another runner is running?');
 
   runner._current = null, runner._noerror = true;
-  grunt.config(Const.GruntPkg, grunt.file.readJSON(argv.opts.config
-    || runner._packagef));
 
-  var tconf = _.extend({}, grunt.config.get(Const.GruntPkg).configure,
-    runner.configure);
+  // File base read
+  var pkgfile = argv.opts.config || runner._packagef;
+  if(fs.existsSync(pkgfile))
+    grunt.config(Const.GruntPkg, grunt.file.readJSON(pkgfile));
+
+  // JavaScript object base read
+  var pconf = grunt.config.get(Const.GruntPkg) || {};
+  var tconf = _.extend({}, pconf.configure, runner.configure);
   for( var i in tconf)
     grunt.config.set(i, tconf[i]);
 
+  // Load Tasks
   var tasks = {};
   fs.readdir(taskroot, function(err, files) {
 
@@ -188,8 +193,11 @@ function _asynchronous(fn) {
 }
 
 function _runTaskList(taskList) {
+  var runner = grunt.runner;
   taskList && grunt.task.run(_execNpmLoad(taskList));
-  grunt.task.start();
+  _asynchronous(function() {
+    runner.emit('start', [].concat(runner._taskList)), grunt.task.start();
+  })
 }
 
 function _execNpmLoad(taskList) {
