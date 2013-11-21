@@ -9,17 +9,9 @@ module.exports = function(grunt) {
   }, grunt.fail));
 };
 function gruntRunnerTest(grunt, conf, gtask) {
-
-  var line = [], done = gtask.async(), stop = function(e) {
-    grunt.fail.fatal(e);
-  }, log = function(m) {
-    _.util.log('[' + gtask.name + '] ' + m);
-  };
-
+  var line = [], done = gtask.async();
   line.push(function() {
-    log('done.'), done();
+    grunt.log.writeln('[' + gtask.name + '] done.'), done();
   });
-
   _.micropipe(line);
-
 }
