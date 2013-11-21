@@ -170,9 +170,10 @@ function _setupEventOptions() {
 }
 
 function gruntInit() {
-  var runner = grunt.runner;
-  runner && process.chdir(runner._cwd);
-  delete grunt.runner;
+  _asynchronous(function() {
+    var runner = grunt.runner;
+    runner && process.chdir(runner._cwd), delete grunt.runner;
+  });
 }
 
 function config(k, v) {
