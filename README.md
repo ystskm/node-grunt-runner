@@ -1,5 +1,6 @@
 # grunt-runner, grun
   
+[![Version](https://badge.fury.io/js/grunt-runner.png)](https://npmjs.org/package/grunt-runner)
 [![Build status](https://travis-ci.org/ystskm/node-grunt-runner.png)](https://travis-ci.org/ystskm/node-grunt-runner)  
   
 Support for pipeline execution of grunt tasks.  
@@ -102,6 +103,17 @@ Default reading target: *package.json*
   }
 }
 ```
+You can change the target file via `argv` or specify in **taskdir**
+```js
+node main.js --config=package-alias.json
+```
+,or
+```js
+require('grunt-runner').run(rootdir, 'package-alias.json')
+```
+In **taskdir**, you can specify _task directory_ and _target file name_, both or either with using comma ",".
+e.g. `taskgroup.json,tasks`, `taskgroup.json`, `tasks`
+The value will be treated as a _target file name_ when `.json` is found at the last of the value.
 
 __This file is not required. If not provide (and the "taskList" is not provided, )__  
 (1) Tasks are listed up by the directory list in `taskdir`.  
@@ -193,7 +205,7 @@ module.exports = function(grunt) {
 ```js
 {
   "name": "grunt-runner-test",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "taskList": ["run"],
   "configure": {
     "concat": {
@@ -205,6 +217,11 @@ module.exports = function(grunt) {
 *same configuration can be given at the time of run*
 ```js
 require('grunt-runner')({
+  pkg: {
+    name: 'grunt-runner-test',
+    version: '1.0.0',
+    taskList: ['run']
+  },
   concat: {
     banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
   }
