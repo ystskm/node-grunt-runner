@@ -111,10 +111,10 @@ node main.js --config=package-alias.json
 ```js
 require('grunt-runner').run(rootdir, 'package-alias.json')
 ```
-In **taskdir**, you can specify _task directory_ and _target file name_, both or either with using comma ",".
-e.g. `taskgroup.json,tasks`, `taskgroup.json`, `tasks`
-The value will be treated as a _target file name_ when `.json` is found at the last of the value.
-
+In **taskdir**, you can specify _task directory_ and _target file name_, both or either with using comma ",".  
+e.g. `taskgroup.json,tasks`, `taskgroup.json`, `tasks`  
+The value will be treated as a _target file name_ when `.json` is found at the last of the value.  
+  
 __This file is not required. If not provide (and the "taskList" is not provided, )__  
 (1) Tasks are listed up by the directory list in `taskdir`.  
 (2) If tasks are listed, run the tasks.  
