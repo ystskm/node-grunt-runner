@@ -120,7 +120,8 @@ function start() {
 
       var taskn = taskList.shift();
       if(!tasks[taskn])
-        return nextTaskGroup();
+        return runner.emit('_error', new Error('Task "' + taskn
+          + '" is not defined in target directory.'));
 
       grunt.loadTasks(tasks[taskn]);
       _runTaskList([taskn]);
