@@ -93,13 +93,15 @@ function start() {
   var tasks = {};
   fs.readdir(taskroot, function(err, files) {
 
+    _.assert('Task files are listed: ' + files);
+
     if(err)
       return _runTaskList(); // execute tasks already in queue
 
     files.forEach(function(taskd) {
       taskd = path.join(taskroot, taskd);
       fs.statSync(taskd).isDirectory() && (function() {
-        tasks[_.taskname(taskd)] = taskd;
+        tasks[_.taskname(taskd)] = taskd, grunt.loadTasks(taskd);
       })();
     });
 
@@ -123,7 +125,6 @@ function start() {
         return runner.emit('_error', new Error('Task "' + taskn
           + '" is not defined in target directory.'));
 
-      grunt.loadTasks(tasks[taskn]);
       _runTaskList([taskn]);
 
     }
