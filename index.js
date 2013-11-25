@@ -143,14 +143,9 @@ function _setupEventOptions() {
     }
   });
 
-  grunt.event.on('*', function() {
-    var ee = grunt.runner, evt = this.event, task = grunt.task.current;
-    var tnam = task.name.replace(/:.+$/, ''), args = _.toArray(arguments);
-    _asynchronous(function() {
-      args = [tnam + '.' + evt].concat(args);
-      ee.emit.apply(ee, args), ee.emit('data', args);
-    });
-  });
+  (grunt.event._all || []).indexOf(eventBridgeHandler) == -1
+    && grunt.event.on(eventBridgeHandler);
+
   grunt.runner.on('_finish', function(taskname) {
     var runner = grunt.runner;
     taskname = _removeFromTaskList(taskname, true);
@@ -230,4 +225,13 @@ function _removeFromTaskList(taskname, finish) {
   })();
   return finish ? taskname: (runner._current = taskname);
 
+}
+
+function eventBridgeHandler() {
+  var ee = grunt.runner, evt = this.event, task = grunt.task.current;
+  var tnam = task.name.replace(/:.+$/, ''), args = _.toArray(arguments);
+  _asynchronous(function() {
+    args = [tnam + '.' + evt].concat(args);
+    ee.emit.apply(ee, args), ee.emit('data', args);
+  });
 }
