@@ -149,18 +149,20 @@ function _setupEventOptions() {
   grunt.runner.on('_finish', function(taskname) {
     var runner = grunt.runner;
     taskname = _removeFromTaskList(taskname, true);
+    if(runner._noerror !== true)
+      return;
     _asynchronous(function() {
       runner.emit('finish', taskname);
     });
     runner._taskList.length == 0 && _asynchronous(function() {
-      gruntInit(), runner._noerror && runner.emit('end');
+      gruntInit(), runner.emit('end');
     });
   });
   grunt.runner.on('_error', function(e, task) {
     var runner = grunt.runner, taskname = task && task.name;
-    taskname = _removeFromTaskList(taskname);
-    _asynchronous(function() {
-      runner.emit('error', e, task);
+    taskname = _removeFromTaskList(taskname, e);
+    grunt.task.clearQueue(), _asynchronous(function() {
+      gruntInit(), runner.emit('error', e, task);
     });
   });
 
@@ -217,7 +219,7 @@ function _removeFromTaskList(taskname, finish) {
     return taskname;
   }
 
-  !finish && (runner._noerror = false);
+  finish !== true && (runner._noerror = finish);
   (idx === -1 ? function() {
     taskname = runner._taskList.shift();
   }: function() {
