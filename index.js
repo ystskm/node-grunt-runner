@@ -155,24 +155,25 @@ function _setupEventOptions() {
       runner.emit('finish', taskname);
     });
     runner._taskList.length == 0 && _asynchronous(function() {
-      gruntInit(), runner.emit('end');
+      gruntInit(true), runner.emit('end');
     });
   });
   grunt.runner.on('_error', function(e, task) {
     var runner = grunt.runner, taskname = task && task.name;
     taskname = _removeFromTaskList(taskname, e);
     grunt.task.clearQueue(), _asynchronous(function() {
-      gruntInit(), runner.emit('error', e, task);
+      gruntInit(true), runner.emit('error', e, task);
     });
   });
 
 }
 
-function gruntInit() {
-  _asynchronous(function() {
+function gruntInit(sync) {
+  sync ? init(): _asynchronous(init);
+  function init() {
     var runner = grunt.runner;
     runner && process.chdir(runner._cwd), delete grunt.runner;
-  });
+  }
 }
 
 function config(k, v) {
