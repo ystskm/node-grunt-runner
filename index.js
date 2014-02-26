@@ -29,24 +29,24 @@ function gruntRunner(workdirc, taskroot, configure) {
   this._current = null, this._noerror = true;
 
   // simple mode
+  // grun(taskList)
   if(Array.isArray(workdirc))
     taskList.push.apply(taskList, workdirc), workdirc = null;
+  // grun(workdirc, taskList)
   else if(Array.isArray(taskroot))
     taskList.push.apply(taskList, taskroot), taskroot = null;
 
   // normal mode
-  else if(workdirc && typeof workdirc != 'string')
+  // grun(configure)
+  else if(configure == null && taskroot == null && typeof workdir != 'string')
     configure = workdirc, taskroot = null, workdirc = null;
-  else if(workdirc && taskroot && typeof taskroot != 'string')
+  // grun(workdirc, configure)
+  else if(configure == null && typeof taskroot != 'string')
     configure = taskroot, taskroot = null;
 
   this._cwd = process.cwd(), workdirc && process.chdir(workdirc);
+  this._workdirc = workdirc || this._workdirc || process.cwd();
   _setupEventOptions();
-
-  if(taskList.length) // runTaskList
-    return _runTaskList([].concat(taskList));
-
-  this._workdirc = workdirc || process.cwd();
 
   // package.json,tasks
   if(typeof taskroot == 'string') {
@@ -55,8 +55,13 @@ function gruntRunner(workdirc, taskroot, configure) {
     if(taskroot.length == 1 && !/\.json$/.test(taskroot[0]))
       taskroot.unshift('');
   }
-  this._packagef = taskroot && taskroot[0] || Default.Package;
-  this._taskroot = taskroot && taskroot[1] || Default.Tasks;
+
+  this._packagef = taskroot && taskroot[0] || this._packagef || Default.Package;
+  this._taskroot = taskroot && taskroot[1] || this._taskroot || Default.Tasks;
+
+  if(taskList.length) // runTaskList with Loading
+    return _runWithLoad([].concat(taskList));
+
   this.configure = configure || {};
   this.start();
 
@@ -89,47 +94,13 @@ function start() {
   for( var i in tconf)
     grunt.config.set(i, tconf[i]);
 
-  // Load Tasks
-  var tasks = {};
+  // Load and Run Tasks
+  // if error, execute tasks already in queue
   fs.readdir(taskroot, function(err, files) {
-
-    _.assert('Task files are listed: ' + files);
-
-    if(err)
-      return _runTaskList(); // execute tasks already in queue
-
-    files.forEach(function(taskd) {
-      taskd = path.join(taskroot, taskd);
-      fs.statSync(taskd).isDirectory() && (function() {
-        tasks[_.taskname(taskd)] = taskd, grunt.loadTasks(taskd);
-      })();
-    });
-
-    runner._taskList = grunt.config.get(Const.GruntPkg).taskList
-      || Object.keys(tasks);
-
-    // "_finish" is internal event for proceed.
-    runner.on('_finish', nextTaskGroup);
-
-    // execute first task
-    var taskList = [].concat(runner._taskList);
-    nextTaskGroup();
-
-    function nextTaskGroup() {
-
-      if(taskList.length === 0)
-        return;
-
-      var taskn = taskList.shift();
-      if(!tasks[taskn])
-        return runner.emit('_error', new Error('Task "' + taskn
-          + '" is not defined in target directory.'));
-
-      _runTaskList([taskn]);
-
-    }
-
+    _.assert('[grunt-runner] Task files are found: ' + files);
+    err ? _runTask(): _runWithLoad(files);
   });
+
 }
 
 function _setupEventOptions() {
@@ -160,14 +131,19 @@ function _setupEventOptions() {
       });
     });
   });
+
   grunt.runner.on('_error', function(e, task) {
-    var runner = grunt.runner, taskname = task && task.name;
+
+    var runner = grunt.runner;
+    var taskname = typeof task == 'string' ? task: task && task.name;
+
     taskname = _removeFromTaskList(taskname, e);
     grunt.task.clearQueue(), _asynchronous(function() {
       gruntInit(function() {
         runner.emit('error', e, task);
       });
     });
+
   });
 
 }
@@ -197,23 +173,52 @@ function _asynchronous(fn) {
   _.processor(fn); // force asynchronous for event bind.
 }
 
-function _runTaskList(taskList) {
+function _runTask(taskname) {
   var runner = grunt.runner;
-  taskList && grunt.task.run(_execNpmLoad(taskList));
-  _asynchronous(function() {
-    runner.emit('start', [].concat(runner._taskList)), grunt.task.start();
-  })
+  taskname && _sigOfNpm(taskname) ? _execNpmLoad(taskname): (function() {
+    var taskr = path.join(runner._workdirc, runner._taskroot, taskname);
+    try {
+      fs.statSync(taskr).isDirectory() && grunt.loadTasks(taskr);
+      grunt.task.run(taskname);
+    } catch(e) {
+      grunt.task.run(taskname);
+      // ignore load error 
+      // but it may occurs 'Task "[taskname]" not found.' error on runner.
+    }
+    _asynchronous(function() {
+      runner.emit('start', [].concat(runner._taskList));
+      grunt.task.start();
+    });
+  })();
 }
 
-function _execNpmLoad(taskList) {
-  var runner = grunt.runner, ret = [];
-  taskList.forEach(function(t) {
-    var is_load_task = /^npm:$/i.test(t.substr(0, 4));
-    is_load_task ? (function() {
-      grunt.loadNpmTasks(t.substr(4)), runner.emit('_finish', t);
-    })(): ret.push(t);
-  });
-  return ret;
+function _runWithLoad(tasks) {
+  var runner = grunt.runner;
+
+  runner._taskList = grunt.config.get(Const.GruntPkg).taskList
+    || (Array.isArray(tasks) ? tasks: Object.keys(tasks));
+  _.assert('[grunt-runner] Task listed: ' + runner._taskList);
+
+  // "_finish" is internal event for proceed.
+  runner.on('_finish', nextTaskGroup);
+
+  // execute first task
+  var taskList = [].concat(runner._taskList);
+  nextTaskGroup();
+
+  function nextTaskGroup() {
+    taskList.length !== 0 && _runTask(taskList.shift());
+  }
+
+}
+
+function _execNpmLoad(taskanme) {
+  var runner = grunt.runner;
+  grunt.loadNpmTasks(taskanme.substr(4)), runner.emit('_finish', taskanme);
+}
+
+function _sigOfNpm(t) {
+  return /^npm:$/i.test(t.substr(0, 4));
 }
 
 function _removeFromTaskList(taskname, finish) {
