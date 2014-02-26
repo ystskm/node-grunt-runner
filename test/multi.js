@@ -31,7 +31,7 @@ js_conf.uglify = {
   },
   dist: {
     files: {
-      'dist/<%= pkg.name %>.min.js': ['<%= concat.BBB.dest %>']
+      'dist/<%= pkg.name %>.min.js': ['<%= concat.AAA.dest %>']
     }
   }
 };
