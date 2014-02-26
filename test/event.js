@@ -29,7 +29,7 @@ module.exports = nodeunit.testCase({
     gr.on('ok_event.ok', function(task) {
       // (1, 2)
       t.equals(task.nameArgs, nameArgs[cnt]);
-      t.ok(cnt++ < 4);
+      t.ok(cnt++ < 2);
     }).on('finish', function(taskname) {
       // (3, 4)
       t.equal(taskname, taskList.shift());
