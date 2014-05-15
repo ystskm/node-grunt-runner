@@ -181,6 +181,7 @@ function _runTask(taskname) {
       fs.statSync(taskr).isDirectory() && grunt.loadTasks(taskr);
       grunt.task.run(taskname);
     } catch(e) {
+      console.error('ignore loadTasks?', e);
       grunt.task.run(taskname);
       // ignore load error 
       // but it may occurs 'Task "[taskname]" not found.' error on runner.
