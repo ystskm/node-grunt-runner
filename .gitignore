@@ -3,3 +3,4 @@
 .project
 test/node_modules
 test/dist
+/node_modules/
