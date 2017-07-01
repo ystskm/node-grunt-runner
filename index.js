@@ -15,10 +15,16 @@ var Default = {
 var _ = gruntRunner._ = require('./lib/task-util');
 module.exports = gruntRunner;
 
+// static parameter
+gruntRunner._debug = FALSE;
+gruntRunner._trace = FALSE;
+gruntRunner._quiet = FALSE;
+
 // static methods
 gruntRunner.run = gruntRunner;
 gruntRunner.config = config;
 gruntRunner.initConfig = initConfig;
+gruntRunner.set = set;
 
 function gruntRunner(workdirc, taskroot, configure) {
 
@@ -55,7 +61,12 @@ function gruntRunner(workdirc, taskroot, configure) {
     configure = taskroot, taskroot = NULL;
   }
 
-  gr._cwd = process.cwd(), workdirc && process.chdir(workdirc);
+  gr._cwd = process.cwd();
+  if(workdirc) {
+    debug('process.chdir: ' + workdirc)
+    process.chdir(workdirc);
+  }
+
   gr._workdirc = workdirc || gr._workdirc || process.cwd();
   _setupEventOptions();
 
@@ -114,7 +125,7 @@ function start() {
   // Load and Run Tasks
   // if error, execute tasks already in queue
   fs.readdir(taskroot, function(er, files) {
-    _.assert('[grunt-runner] Task files are found: ' + files, taskroot, er);
+    debug('Task files are found: ' + files, taskroot, er);
     er ? _runTask(): _runWithLoad(files);
   });
 
@@ -130,7 +141,7 @@ function _setupEventOptions() {
       // "this" is { done: <Function>, error: <Function> }
       // grunt.task.current may {} (already cleared)
       var curr = grunt.task.current;
-      log('DONE TASK:', curr, this, !!grunt.runner);
+      trace('DONE TASK:', curr, this, !!grunt.runner);
       if(gr = grunt.runner) {
         gr.emit('_finish', curr.name); // "curr.name" may null
       }
@@ -142,7 +153,7 @@ function _setupEventOptions() {
       // "this" is { name: <String>, nameArgs: <NULL>|<String>|<Array> }
       // grunt.task.current may {} (already cleared)
       var curr = grunt.task.current;
-      log('FAIL TASK:', curr, this, !!grunt.runner, e);
+      trace('FAIL TASK:', curr, this, !!grunt.runner, e);
       if(gr = grunt.runner) {
         gr.emit('_error', e, this);
       }
@@ -151,8 +162,8 @@ function _setupEventOptions() {
   });
 
   var evt_a = grunt.event._all || [];
-  if(evt_a.indexOf(eventBridgeHandler) == -1) {
-    grunt.event.on(eventBridgeHandler);
+  if(evt_a.indexOf(_eventBridgeHandler) == -1) {
+    grunt.event.on(_eventBridgeHandler);
   }
 
   grunt.runner.on('_finish', function(taskname) {
@@ -163,16 +174,16 @@ function _setupEventOptions() {
       return;
     }
 
+    debug('[' + taskname + '] EMIT_FINISH. remains: ' + gr._taskList.length);
+
     setImmediate(function() {
       gr.emit('finish', taskname);
     });
-
-    log('FINISH TASK! remains:' + gr._taskList.length);
     if(gr._taskList.length != 0) {
       return;
     }
 
-    log('[' + taskname + '] ON_END');
+    debug('[' + taskname + '] EMIT_END');
     gruntInit(function() {
       gr.emit('end');
     });
@@ -187,7 +198,7 @@ function _setupEventOptions() {
     taskname = _removeFromTaskList(taskname, e);
     grunt.task.clearQueue();
 
-    log('[' + taskname + '] ON_ERROR');
+    debug('[' + taskname + '] EMIT_ERROR');
     gruntInit(function() {
       gr.emit('error', e, task);
     });
@@ -196,6 +207,11 @@ function _setupEventOptions() {
 
 }
 
+/**
+ * 
+ * @param callback
+ * @returns
+ */
 function gruntInit(callback) {
   setImmediate(function() {
 
@@ -211,6 +227,23 @@ function gruntInit(callback) {
   });
 }
 
+/**
+ * 
+ * @param k
+ * @param v
+ * @returns
+ */
+function set(k, v) {
+  var rk = '_' + k
+  return v == NULL ? gruntRunner[rk]: (gruntRunner[rk] = v);
+}
+
+/**
+ * 
+ * @param k
+ * @param v
+ * @returns
+ */
 function config(k, v) {
   if(k && is('object', k)) {
     each(k, function(k, v) {
@@ -221,15 +254,30 @@ function config(k, v) {
   return v ? grunt.config.set(k, v): grunt.config.get(k);
 }
 
+/**
+ * 
+ * @param v
+ * @returns
+ */
 function initConfig(v) {
   return grunt.config.init(v || {}), gruntRunner;
 }
 
-function _loadIfDir(fp) {
-  fs.statSync(fp).isDirectory() && grunt.loadTasks(fp);
+function _eventBridgeHandler() {
+  trace('_eventBridgeHandler');
+
+  var ee = grunt.runner, evt = this.event, task = grunt.task.current;
+  var tnam = task.name.replace(/:.+$/, ''), args = _.toArray(arguments);
+  setImmediate(function() {
+    args = [tnam + '.' + evt].concat(args);
+    debug('_eventBridgeHandler.emit', args);
+    ee.emit.apply(ee, args), ee.emit('data', args);
+  });
+
 }
 
 function _runTask(taskname) {
+  trace('_runTask', taskname);
 
   var gr = grunt.runner;
   if(taskname && _sigOfNpm(taskname)) {
@@ -241,7 +289,7 @@ function _runTask(taskname) {
   try {
     _loadIfDir(taskr);
   } catch(e) {
-    log('ignore loadTasks?(@_runTask)', e);
+    debug('ignore loadTasks?(@_runTask)', e);
   }
   grunt.task.run(taskname);
 
@@ -255,6 +303,7 @@ function _runTask(taskname) {
 }
 
 function _runWithLoad(tasks) {
+  trace('_runWithLoad', tasks);
 
   var gr = grunt.runner;
   var given = isArray(tasks) ? tasks: Object.keys(tasks);
@@ -265,12 +314,12 @@ function _runWithLoad(tasks) {
     try {
       _loadIfDir(taskr);
     } catch(e) {
-      log('ignore loadTasks?(@_runWithLoad)', e);
+      debug('ignore loadTasks?(@_runWithLoad)', e);
     }
   });
 
-  log(JSON.stringify(grunt.config.get(Const.GruntPkg)));
-  log('[grunt-runner] Task listed: ' + gr._taskList);
+  trace(JSON.stringify(grunt.config.get(Const.GruntPkg)));
+  trace('[grunt-runner] Task listed: ' + gr._taskList);
 
   // "_finish" is internal event for proceed.
   gr.on('_finish', nextTaskGroup);
@@ -280,23 +329,23 @@ function _runWithLoad(tasks) {
   nextTaskGroup();
 
   function nextTaskGroup() {
-    log('[grunt-runner] nextTaskGroup remains:' + taskList.length);
+    debug('nextTaskGroup remains:' + taskList.length);
     taskList.length !== 0 && _runTask(taskList.shift());
   }
 
 }
 
 function _execNpmLoad(taskanme) {
+  trace('_execNpmLoad', taskname);
+
   var gr = grunt.runner;
   grunt.loadNpmTasks(taskanme.substr(4));
   gr.emit('_finish', taskanme);
-}
 
-function _sigOfNpm(t) {
-  return (/^npm:$/i).test(t.substr(0, 4));
 }
 
 function _removeFromTaskList(taskname, finish) {
+  trace('_removeFromTaskList', taskname, finish);
 
   var gr = grunt.runner, idx = gr._taskList.indexOf(taskname);
   if(gr._current) { // If Error occurs already.
@@ -323,19 +372,41 @@ function _removeFromTaskList(taskname, finish) {
 
 }
 
-function eventBridgeHandler() {
-  var ee = grunt.runner, evt = this.event, task = grunt.task.current;
-  var tnam = task.name.replace(/:.+$/, ''), args = _.toArray(arguments);
-  setImmediate(function() {
-    args = [tnam + '.' + evt].concat(args);
-    ee.emit.apply(ee, args), ee.emit('data', args);
-  });
+// --------------- //
+function _loadIfDir(fp) {
+  fs.statSync(fp).isDirectory() && grunt.loadTasks(fp);
+}
+function _sigOfNpm(t) {
+  return (/^npm:$/i).test(t.substr(0, 4));
 }
 
 // --------------- //
-function log() {
-  return _.assert.apply(_, arguments);
+//     Logging     //
+// --------------- //
+function trace() {
+  if(!gruntRunner._trace) {
+    return;
+  }
+  console.log('[grunt-runner](trace) ' + new Date().toISOString() + ' - ');
+  console.log.apply(console, arguments);
+  console.log('');
 }
+function debug() {
+  if(!gruntRunner._debug && !gruntRunner._trace) {
+    return;
+  }
+  console.log('[grunt-runner](debug) ' + new Date().toISOString() + ' - ');
+  console.log.apply(console, arguments);
+  console.log('');
+}
+function log() {
+  if(gruntRunner._quiet) {
+    return;
+  }
+  console.log.apply(console, arguments);
+}
+
+// --------------- //
 function extend() {
   return _.extend.apply(_, arguments);
 }

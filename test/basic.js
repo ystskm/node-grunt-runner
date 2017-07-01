@@ -1,5 +1,6 @@
 var nodeunit = require('nodeunit');
 var grun = require('../index');
+grun.set('debug', true);
 
 var banner = '/*! <%= pkg.name %>'
   + ' <%= grunt.template.today("dd-mm-yyyy") %> */\n';

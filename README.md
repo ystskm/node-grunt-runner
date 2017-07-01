@@ -36,11 +36,16 @@ gr.initConfig({
 ## API - runs and pipe tasks under "tasks" directory 
 assume that directory exists just below executing script file
 ```js
-runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
+  runner = require('grunt-runner')([rootdir][,taskdir][,comconf])
 ```
 *,or use alias*
 ```js
-runner = require('grunt-runner').run([rootdir][,taskdir][,comconf])
+  runner = require('grunt-runner').run([rootdir][,taskdir][,comconf])
+```
+*,then debug mode*
+```js
+  gr = require('grunt-runner'); gr.set('debug', true); // use 'trace' for more detail.
+  runner = gr.run([rootdir][,taskdir][,comconf])
 ```
   
 ###Arguments  
