@@ -126,15 +126,23 @@ function _setupEventOptions() {
   grunt.task.options({
     done: function() {
 
-      log('DONE TASK:' + grunt.task.current.name);
+      // 2017.07.01 Y.Sakamoto
+      // "this" is { done: <Function>, error: <Function> }
+      // grunt.task.current may {} (already cleared)
+      var curr = grunt.task.current;
+      log('DONE TASK:', curr, this, !!grunt.runner);
       if(gr = grunt.runner) {
-        gr.emit('_finish', grunt.task.current.name);
+        gr.emit('_finish', curr.name); // "curr.name" may null
       }
 
     },
     error: function(e) {
 
-      log('FAIL TASK:' + grunt.task.current.name);
+      // 2017.07.01 Y.Sakamoto
+      // "this" is { name: <String>, nameArgs: <NULL>|<String>|<Array> }
+      // grunt.task.current may {} (already cleared)
+      var curr = grunt.task.current;
+      log('FAIL TASK:', curr, this, !!grunt.runner, e);
       if(gr = grunt.runner) {
         gr.emit('_error', e, this);
       }
@@ -164,7 +172,7 @@ function _setupEventOptions() {
       return;
     }
 
-    log('ON_END');
+    log('[' + taskname + '] ON_END');
     gruntInit(function() {
       gr.emit('end');
     });
@@ -179,7 +187,7 @@ function _setupEventOptions() {
     taskname = _removeFromTaskList(taskname, e);
     grunt.task.clearQueue();
 
-    log('ON_ERROR');
+    log('[' + taskname + '] ON_ERROR');
     gruntInit(function() {
       gr.emit('error', e, task);
     });
@@ -291,9 +299,11 @@ function _sigOfNpm(t) {
 function _removeFromTaskList(taskname, finish) {
 
   var gr = grunt.runner, idx = gr._taskList.indexOf(taskname);
-  if(gr._current) {// if Error occurs already.
+  if(gr._current) { // If Error occurs already.
     taskname = gr._current;
-    if(finish) delete gr._current;
+    if(finish) {
+      delete gr._current;
+    }
     return taskname;
   }
 
@@ -301,11 +311,14 @@ function _removeFromTaskList(taskname, finish) {
     gr._noerror = finish;
   }
 
-  (idx === -1 ? function() {
+  // remove finished task! 
+  // ( when finish, taskname cannot get from grunt.task.current,
+  //  so the name should get from gr._taskList() )
+  if(idx === -1) {
     taskname = gr._taskList.shift();
-  }: function() {
+  } else {
     gr._taskList.splice(idx, 1);
-  })();
+  }
   return finish ? taskname: (gr._current = taskname);
 
 }
